@@ -10,6 +10,7 @@ import csv
 from datetime import datetime
 import pandas as pd
 import signal
+from tabulate import tabulate
 
 INGRESS_RATE = 0  # Kbps
 HOST_IP = "10.0.0.1"
@@ -193,8 +194,8 @@ def get_ovs_conf(arg: str):
                     "interface": i,
                     "bridge": br,
                     "ipv4": get_ipv4(i),
-                    "ingress_policing_rate": float(ipr),
-                    "ingress_policing_burst": float(ipb),
+                    "ingress_policing_rate": int(ipr),
+                    "ingress_policing_burst": int(ipb),
                 }
             )
     if arg == True:
@@ -222,7 +223,7 @@ def get_device_ipr_hostname(ip: str):
         None,
     )
     hostname = cmd("hostname").split(".")[0]
-    return device, int(ipr), hostname
+    return device, ipr, hostname
 
 
 ########## send dd nc packets ##########
@@ -328,7 +329,8 @@ def apply_profile():
 def main():
     args = args_fnc()
     if args.show:
-        get_ovs_conf(args.show)
+        conf_data = get_ovs_conf(args.show)
+        print(tabulate(conf_data, headers="keys"))
     elif args.test:
         inputs = input_dd_params()
         perform_test(inputs)
