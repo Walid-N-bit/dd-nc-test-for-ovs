@@ -300,7 +300,7 @@ def perform_test(inputs: dict):
             path = "/".join(
                 [
                     DATA_PATH,
-                    f"{get_device_ipr_hostname(HOST_IP)[2]}",
+                    f"src_{HOST_IP}",
                     f"{get_device_ipr_hostname(HOST_IP)[0]}_ipr_{get_device_ipr_hostname(HOST_IP)[1]}.csv",
                 ]
             )
